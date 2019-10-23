@@ -1,0 +1,3 @@
+FROM microsoft/dotnet:2.1-aspnetcore-runtime
+WORKDIR /app
+NTRYPOINT ["dotnet", "aspnetapp.dll"]
