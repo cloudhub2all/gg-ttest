@@ -1,5 +1,8 @@
 version: 0.2
-
+# Declaration of environment variables
+environment_variables:
+ plaintext:
+  REPOSITORY_URI: "715024434565.dkr.ecr.us-east-1.amazonaws.com/net-app"
 
 phases:
   pre_build:
@@ -8,7 +11,6 @@ phases:
       - aws --version
       - Install-Package -Name AWSPowerShell -Force
       - Invoke-Expression -Command (Get-ECRLoginCommand -Region us-east-1).Command
-      - REPOSITORY_URI=715024434565.dkr.ecr.us-east-1.amazonaws.com/net-app
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
   build:
