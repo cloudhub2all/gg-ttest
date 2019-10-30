@@ -10,9 +10,9 @@ phases:
       - echo Logging in to Amazon ECR...
       - aws --version
       - Install-Package -Name AWSPowerShell -Force
+      - Install-Module DockerMsftProvider -Force
+      - Install-Package Docker -ProviderName DockerMsftProvider -Force
       - Invoke-Expression -Command (Get-ECRLoginCommand -Region us-east-1).Command
-      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
   build:
     commands:
       - echo Build started on `date`
@@ -25,8 +25,5 @@ phases:
       - echo Pushing the Docker images...
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - echo Writing image definitions file...
-      - printf '[{"name":"nodeapp","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-      - cat imagedefinitions.json 
 artifacts:
     files: imagedefinitions.json
