@@ -12,6 +12,8 @@ phases:
       - Install-Package -Name AWSPowerShell -Force
       - Install-Module DockerMsftProvider -Force
       - Install-Package Docker -ProviderName DockerMsftProvider -Force
+      - (Install-WindowsFeature Containers).RestartNeeded
+      - Restart-Computer
       - Invoke-Expression -Command (Get-ECRLoginCommand -Region us-east-1).Command
   build:
     commands:
