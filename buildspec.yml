@@ -1,20 +1,15 @@
 version: 0.2
-# Declaration of environment variables
-environment_variables:
- plaintext:
-  REPOSITORY_URI: "715024434565.dkr.ecr.us-east-1.amazonaws.com/net-app"
+
 
 phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
       - aws --version
-      - Install-Package -Name AWSPowerShell -Force
-      - Install-Module DockerMsftProvider -Force
-      - Install-Package Docker -ProviderName DockerMsftProvider -Force
-      - (Install-WindowsFeature Containers).RestartNeeded
-      - Restart-Computer
-      - Invoke-Expression -Command (Get-ECRLoginCommand -Region us-east-1).Command
+      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+      - REPOSITORY_URI=715024434565.dkr.ecr.us-east-1.amazonaws.com/net-app
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
   build:
     commands:
       - echo Build started on `date`
