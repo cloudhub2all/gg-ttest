@@ -13,7 +13,6 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - sudo rm -rf app
       - dotnet publish -c relese -o app/ .
       - docker build -t $REPOSITORY_URI:latest .
   post_build:
