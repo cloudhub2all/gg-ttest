@@ -12,7 +12,10 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - echo Building the Docker image...          
+      - echo Building the Docker image...
+      - cd /home/ubuntu/gg-ttest
+      - sudo rm -rf app
+      - dotnet publish -c relese -o app/ .
       - docker build -t $REPOSITORY_URI:latest .
   post_build:
     commands:
